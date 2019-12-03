@@ -39,22 +39,18 @@ def trace_path(path):
 
 
 def intersections(paths, part_two=False):
-
+    base = set(paths[0]).intersection(paths[1])
+    try:
+        base.remove((0, 0))
+    except KeyError:
+        pass
     if part_two:
-        base = set(paths[0]).intersection(paths[1])
-        try:
-            base.remove((0, 0))
-        except KeyError:
-            pass
         result = [
             (point, paths[0].index(point) + paths[1].index(point))
             for point in base
         ]
         return sorted(result, key=lambda k: k[1])
-    return sorted(
-        set(paths[0][1:]).intersection(paths[1][1:]),
-        key=lambda c: abs(c[0]) + abs(c[1]),
-    )
+    return sorted(base, key=lambda c: abs(c[0]) + abs(c[1]))
 
 
 def part_one(paths):
