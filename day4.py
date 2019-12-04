@@ -19,19 +19,19 @@ def has_adjacent_char(password, part_two=False):
         return sum(
             a == b and b == c for a, b, c in zip(pw[:-2], pw[1:-1], pw[2:])
         ) == 0
-    valid_found = False
+
     for char in set(adjacent_chars):
         start = pw.index(f'{char}{char}')
         if start == 0:
             if pw[2] != char:
-                valid_found = True
+                return True
         elif start == 4:
             if pw[start - 1] != char:
-                valid_found = True
+                return True
         else:
             if pw[start - 1] != char and pw[start + 2] != char:
-                valid_found = True
-    return valid_found
+                return True
+    return False
 
 
 def always_increasing(password):
