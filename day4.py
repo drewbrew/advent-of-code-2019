@@ -15,7 +15,6 @@ def has_adjacent_char(password, part_two=False):
     adjacent_chars = list(
         a for a, b in zip(pw[:-1], pw[1:]) if a == b
     )
-    print(pw, adjacent_chars)
     if len(adjacent_chars) == 1:
         return sum(
             a == b and b == c for a, b, c in zip(pw[:-2], pw[1:-1], pw[2:])
@@ -23,7 +22,6 @@ def has_adjacent_char(password, part_two=False):
     valid_found = False
     for char in set(adjacent_chars):
         start = pw.index(f'{char}{char}')
-        print(char, start)
         if start == 0:
             if pw[2] != char:
                 valid_found = True
@@ -53,8 +51,6 @@ def part_one(start, end, part_two=False):
     matching = 0
     for x in range(start, end + 1):
         if is_valid(x, part_two):
-            if part_two:
-                print(x)
             matching += 1
     return matching
 
