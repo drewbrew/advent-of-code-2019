@@ -127,6 +127,10 @@ def part_two(puzzle):
     # Therefore, we can loop over each dimension independently
     # and then find the least common multiple of the three
     # dimensions' repeat points to get our answer
+
+    # NOTE if I were going to reuse this, I would check all three
+    # dimensions on each step rather than checking each dimension
+    # independently, but I got my gold star, so I'm good.
     repeats = [0, 0, 0]
     for index, dim in enumerate('xyz'):
         moons = [parse_moon(line) for line in puzzle]
