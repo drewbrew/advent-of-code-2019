@@ -240,16 +240,10 @@ def format_steps(steps):
         if isinstance(step, str):
             output.append(ord(step))
         else:
-            if step == 10:
-                # split into two steps
-                # because I'm hard-coding this puzzle,
-                # I don't particularly care about trying
-                # to solve the generic case
-                output += bytearray([ord('6'), ord('4')])
-            elif step > 10:
-                raise ValueError(step)
-            else:
-                output.append(ord(str(step)))
+            while step >= 10:
+                output.append(ord('9'))
+                step -= 9
+            output.append(ord(str(step)))
     return b','.join(output[i:i + 1] for i in range(len(output)))
 
 
