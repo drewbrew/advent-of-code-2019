@@ -1,6 +1,5 @@
 """day 17"""
 import sys
-import subprocess
 from collections import deque, defaultdict
 from itertools import permutations
 
@@ -99,6 +98,7 @@ def advance_robot(position, heading, turn):
 
 def run(inputs, part_two=False, part_two_inputs=None):
     live_display = False
+    screen_cleared = False
     offset = 0
     x = 0
     y = 0
@@ -115,6 +115,9 @@ def run(inputs, part_two=False, part_two_inputs=None):
     if part_two:
         inputs[0] = 2
         live_display = part_two_inputs[-2] == ord('y')
+        if live_display:
+            # clear the screen
+            print('\033[2J', end='')
     while True:
         next_opcode = inputs[offset]
         input1_mode = next_opcode // 100 % 10
@@ -131,6 +134,9 @@ def run(inputs, part_two=False, part_two_inputs=None):
             return grid if not part_two else result
         elif next_opcode == 3:
             assert not input2_mode
+            if live_display and not screen_cleared:
+                print('\033[2J', end='')
+                screen_cleared = True
             value = part_two_inputs.pop(0)
             store(inputs, offset, input1_mode, value, relative_base)
             offset += 2
@@ -146,8 +152,8 @@ def run(inputs, part_two=False, part_two_inputs=None):
             char = chr(last_output)
             if live_display:
                 if char == '\n' and char == last_char:
-                    # reset
-                    subprocess.call('clear')
+                    # reset position to 0
+                    print('\033[0;0H', end='')
                 else:
                     print(char, end='')
             if char == '\n':
