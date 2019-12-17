@@ -1,4 +1,6 @@
-"""day 5"""
+"""day 17"""
+import sys
+import subprocess
 from collections import deque, defaultdict
 from itertools import permutations
 
@@ -96,9 +98,11 @@ def advance_robot(position, heading, turn):
 
 
 def run(inputs, part_two=False, part_two_inputs=None):
+    live_display = False
     offset = 0
     x = 0
     y = 0
+    char = ''
     grid = {}
     result = 0
     relative_base = 0
@@ -110,6 +114,7 @@ def run(inputs, part_two=False, part_two_inputs=None):
     inputs = new_inputs
     if part_two:
         inputs[0] = 2
+        live_display = part_two_inputs[-2] == ord('y')
     while True:
         next_opcode = inputs[offset]
         input1_mode = next_opcode // 100 % 10
@@ -132,18 +137,23 @@ def run(inputs, part_two=False, part_two_inputs=None):
         elif next_opcode == 4:
             assert not input2_mode
             assert not output_mode
+            last_char = char
             last_output = retrieve(inputs, offset, input1_mode, relative_base)
             if last_output not in range(256):
                 result = last_output
                 offset += 2
                 continue
             char = chr(last_output)
+            if live_display:
+                if char == '\n' and char == last_char:
+                    # reset
+                    subprocess.call('clear')
+                else:
+                    print(char, end='')
             if char == '\n':
                 x = 0
                 y += 1
             else:
-                if char not in '.#' and not part_two:
-                    print(f'{char} at {y}, {x}')
                 grid[(y, x)] = char
                 x += 1
             offset += 2
@@ -187,7 +197,6 @@ def run(inputs, part_two=False, part_two_inputs=None):
 
 
 def part_one():
-    
     grid = run(source_inputs)
     lineup = sorted(grid.items())
     score = 0
@@ -236,9 +245,9 @@ def format_steps(steps):
             else:
                 output.append(ord(str(step)))
     return b','.join(output[i:i + 1] for i in range(len(output)))
-        
 
-def part_two():
+
+def part_two(live_display):
     raw_path = [
 
         'R', 6, 'L', 8, 'R', 8,  # c
@@ -264,13 +273,14 @@ def part_two():
         move_c + move_a
     ) == raw_path
     main_prog = ['C', 'C', 'B', 'A', 'B', 'A', 'B', 'A', 'C', 'A']
-    live_display = ['n', '\n']
+    live_display = ['y' if live_display else 'n']
     inputs = b'\n'.join(
         format_steps(move) for move in [main_prog, move_a, move_b, move_c, live_display]
-    )
+    ) + b'\n'
     return run(source_inputs, True, inputs)
 
 
+live_display = len(sys.argv) > 1
 
 print(part_one())
-print(part_two())
+print(part_two(live_display))
