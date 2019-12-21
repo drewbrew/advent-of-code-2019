@@ -174,7 +174,7 @@ def run(inputs, script, part_two=False):
 
 
 def part_one():
-    # simple strategy:
+    # relatively light strategy:
     # jump as long as there's a hole in one of the next three
     # spaces and the 4th space is ground
     instructions = """NOT A J
