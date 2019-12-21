@@ -96,7 +96,7 @@ def advance_robot(position, heading, turn):
 
 
 
-def run(inputs, script, part_two=False):
+def run(inputs, script):
     result = -1
     offset = 0
     relative_base = 0
@@ -105,8 +105,6 @@ def run(inputs, script, part_two=False):
         new_inputs[index] = i
     inputs = new_inputs
     script = [ord(i) for i in script]
-    if part_two:
-        inputs[0] = 2
     while True:
         next_opcode = inputs[offset]
         input1_mode = next_opcode // 100 % 10
